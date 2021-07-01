@@ -1,6 +1,6 @@
-# CosmopolitanIdentifiers
+# Cosmopolitan Identifiers
 
-Reference implementation for [Cosmopolitan Identifiers](https://doi.org/10.47757/obua.cosmo-id.3) (CIDs) as a Swift package.
+Reference implementation of [Cosmopolitan Identifiers](https://doi.org/10.47757/obua.cosmo-id.3) (CIDs) as a Swift package.
 
 The package contains the `CosmoID` type which represents CIDs:
 
