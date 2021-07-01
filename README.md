@@ -4,7 +4,7 @@ Reference implementation for [Cosmopolitan Identifiers](https://doi.org/10.47757
 
 The package contains the `CosmoID` type which represents CIDs:
 
-```
+```Swift
 import CosmopolitanIdentifiers
 
 let cid = CosmoID(external: "Fréchet Колмого́ров θεώρημα")!
