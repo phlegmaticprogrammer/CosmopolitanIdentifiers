@@ -68,5 +68,91 @@
             let nf = CosmoID("frechet-kolmogorov-theorima")!
             XCTAssertEqual(cid, nf)
         }
+        
+        func hex(_ x : UInt32) -> String {
+            return String(format:"0x%04X", x)
+        }
+        
+        func printPrimaries(_ descr : String, _ from : UInt32, _ to : UInt32)
+        {
+            let primaries = Tables.primaryMapping
+            let d = descr.uppercased().replacingOccurrences(of: " ", with: "_")
+            print("\(d) : new Map([")
+            var keys : [UInt32] = []
+            for k in primaries.keys {
+                if k >= from && k <= to {
+                    keys.append(k)
+                }
+            }
+            keys.sort()
+            var lines : [String] = []
+            for k in keys {
+                let values = primaries[k]!
+                lines.append("[\(hex(k)), [\(values.map(hex).joined(separator: ", "))]]")
+            }
+            print("    " + lines.joined(separator: ",\n    "))
+            print("]),")
+            print("")
+        }
+        
+        func printSymbols(_ descr : String, _ from : UInt32, _ to : UInt32, _ symbols : [UInt32 : UInt32] = Tables.symbolMapping)
+        {
+            let d = descr.uppercased().replacingOccurrences(of: " ", with: "_")
+            print("\(d) : new Map([")
+            var keys : [UInt32] = []
+            for k in symbols.keys {
+                if k >= from && k <= to {
+                    keys.append(k)
+                }
+            }
+            keys.sort()
+            var lines : [String] = []
+            for k in keys {
+                let value = symbols[k]!
+                lines.append("[\(hex(k)), \(hex(value))]")
+            }
+            print("    " + lines.joined(separator: ",\n    "))
+            print("]),")
+            print("")
+
+        }
+        
+        func printSymbols(_ descr : String, _ symbols : [UInt32]) {
+            var mapping : [UInt32 : UInt32] = [:]
+            for s in symbols {
+                mapping[s] = s
+            }
+            printSymbols(descr, UInt32.min, UInt32.max, mapping)
+        }
+        
+        func testPrintLettersTypeScript() {
+            printPrimaries("Latin Lowercase", 0x0061, 0x007A);
+            printPrimaries("Latin Uppercase", 0x0041, 0x005A);
+            printPrimaries("Latin Additional 1", 0x00C6, 0x01F3);
+            printPrimaries("Latin Additional 2", 0x1E9E, 0xFB06);
+            printPrimaries("Greek Uppercase", 0x0391, 0x03A9);
+            printPrimaries("Greek Lowercase", 0x03B1, 0x03C9);
+            printPrimaries("Cyrillic", 0x0404, 0x0491);
+        }
+        
+        func testPrintSymbolsTypeScript() {
+            printSymbols("Digits", Tables.Digits)
+            printSymbols("Latin Lowercase", 0x0061, 0x007A);
+            printSymbols("Latin Uppercase", 0x0041, 0x005A);
+            printSymbols("Greek Uppercase", 0x0391, 0x03A9);
+            printSymbols("Greek Lowercase", 0x03B1, 0x03C9);
+            printSymbols("Cyrillic", 0x0404, 0x0491);
+            printSymbols("Script Uppercase", Tables.scriptCapital)
+            printSymbols("Script Lowercase", Tables.scriptSmall)
+            printSymbols("Fraktur Uppercase", Tables.frakturCapital)
+            printSymbols("Fraktur Lowercase", Tables.frakturSmall)
+            printSymbols("Double Struck Uppercase", Tables.doubleStruckCapital)
+            printSymbols("Double Struck Lowercase", Tables.doubleStruckSmall)
+            printSymbols("Double Struck Digits", Tables.doubleStruckDigits)
+            printSymbols("Double Struck Greek", Tables.doubleStruckOther)
+            printSymbols("Hebrew", Tables.Hebrew)
+        }
+        
+        
 
     }
